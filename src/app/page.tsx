@@ -1,4 +1,4 @@
-import styles from './page.module.css'
+import styles from './page.module.css';
 import Bar from '@/components/bar/bar';
 import Nav from '@/components/nav/nav';
 import Centerblock from '@/components/centerblock/centerblock';
