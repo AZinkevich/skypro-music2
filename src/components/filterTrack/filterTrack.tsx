@@ -4,7 +4,7 @@ import { useState } from 'react';
 import styles from './filtertrack.module.css';
 import FilterList from '../filterList/filterList';
 import { TrackType } from '@/sharedTypes/sharedTypes';
-import { data } from '@/data';
+//import { data } from '@/data';
 import classNames from 'classnames';
 import styled from '../filterList/filterList.module.css';
 import FilterLengthList from '../filterLengthList/filterLengthList';
@@ -13,9 +13,10 @@ export default function FilterTrack() {
   const [openFilterListModal, setOpenFilterListModal] = useState(false);
   const [activeFilter, setActiveFilter] = useState(false);
 
-  const trackKeys = Object.keys(data) as (keyof TrackType)[];
+  //const trackKeys = Object.keys(data) as (keyof TrackType)[];
   const [filterListByKey, setFilterListByKey] = useState<keyof TrackType>(
-    trackKeys[1],
+    //trackKeys[1],
+    "_id"
   );
 
   const onOpenFilterList = (key: keyof TrackType) => {
@@ -38,17 +39,17 @@ export default function FilterTrack() {
 
       <div className={styles.filter__container}>
         <div
-          onClick={() => onOpenFilterList('name')}
+          onClick={() => onOpenFilterList('author')}
           className={classNames(styles.filter__button, {
-            [styles.active]: activeFilter && filterListByKey === 'name',
+            [styles.active]: activeFilter && filterListByKey === 'author',
           })}
         >
           исполнителю
         </div>
-        {openFilterListModal && filterListByKey === 'name' && (
+        {openFilterListModal && filterListByKey === 'author' && (
           <FilterList keyOfList={filterListByKey} />
         )}
-        {openFilterListModal && filterListByKey === 'name' && (
+        {openFilterListModal && filterListByKey === 'author' && (
           <FilterLengthList lengthList={filterListByKey} />
         )}
       </div>
