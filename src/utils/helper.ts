@@ -36,3 +36,12 @@ export function getUniqueValuesByKey(
   // Преобразуем Set обратно в массив и возвращаем
   return Array.from(unqueValues);
 }
+
+export const getTimePanel = (
+  currentTime: number,
+  totalTime: number | undefined,
+) => {
+  if (totalTime) {
+    return `${formatTime(currentTime)} / ${formatTime(totalTime)}`;
+  }
+};
