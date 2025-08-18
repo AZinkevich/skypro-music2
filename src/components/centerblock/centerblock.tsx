@@ -31,7 +31,7 @@ export default function Centerblock() {
         </div>
         <div className={styles.content__playlist}>
           {data.map((track) => (
-            <Track track={track} key={track._id} />
+            <Track track={track} key={track._id} playList={data} />
           ))}
         </div>
       </div>
