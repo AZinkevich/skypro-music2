@@ -10,3 +10,20 @@ export type TrackType = {
     track_file: string;
     stared_user: string[];
 }
+
+export type userReturn = {
+    email: string;
+    username:string;
+    _id: number;
+}
+export type UserType = {
+  email: string;
+  username: string;
+  _id: number;
+};
+
+export type SelectionTrackType = {
+  _id: number;
+  name: string;
+  items: number[];
+};
