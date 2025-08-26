@@ -47,11 +47,11 @@ export default function Sidebar() {
           <p className={styles.sidebar__personalName}>Незнакомец</p>
         )}
 
-        <div className={styles.sidebar__icon} onClick={onClickLogout}>
+        { user ? (<div className={styles.sidebar__icon} onClick={onClickLogout}>
           <svg>
             <use xlinkHref="/img/icon/sprite.svg#logout"></use>
           </svg>
-        </div>
+        </div>) : ''}
       </div>
       <div className={styles.sidebar__block}>
         <div className={styles.sidebar__list}>
