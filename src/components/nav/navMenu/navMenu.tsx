@@ -2,6 +2,7 @@ import Link from 'next/link';
 import styles from './navMenu.module.css';
 
 export default function NavMenu() {
+  const data = localStorage.getItem('user');
   return (
     <div className={styles.nav__menu}>
       <ul className={styles.menu__list}>
@@ -16,11 +17,13 @@ export default function NavMenu() {
             Мой плейлист
           </Link>
         </li>
-        <li className={styles.menu__item}>
-          <Link href="../sign-in" className={styles.menu__link}>
-            Войти
-          </Link>
-        </li>
+        {!data ? (
+          <li className={styles.menu__item}>
+            <Link href="/auth/signin" className={styles.menu__link}>
+              Войти
+            </Link>
+          </li>
+        ) : '' }
       </ul>
     </div>
   );

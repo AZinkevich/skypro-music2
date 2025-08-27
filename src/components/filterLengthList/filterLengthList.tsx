@@ -5,9 +5,10 @@ import { getUniqueValuesByKey } from '@/utils/helper';
 
 type LengthListProp = {
   lengthList: keyof TrackType;
+  tracks: TrackType[];
 };
 
-export default function FilterLengthList({ lengthList }: LengthListProp) {
-  const filteredList = getUniqueValuesByKey(data, lengthList);
+export default function FilterLengthList({ lengthList, tracks }: LengthListProp) {
+  const filteredList = getUniqueValuesByKey(tracks, lengthList);
   return <div className={styles.filter__length}>{filteredList.length}</div>;
 }
