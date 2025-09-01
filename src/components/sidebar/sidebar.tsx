@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './sidebar.module.css';
@@ -5,13 +7,16 @@ import { useEffect, useState } from 'react';
 import { UserType } from '@/sharedTypes/sharedTypes';
 import { logout } from '@/store/features/userSlice';
 import { useRouter } from 'next/navigation';
+import { useAppDispatch } from '@/store/store';
 
 export default function Sidebar() {
   const [user, setUser] = useState<UserType | null>(null);
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const userDataFromLS = localStorage.getItem('user');
+
     if (userDataFromLS) {
       try {
         const parsedUser: UserType = JSON.parse(userDataFromLS);
@@ -29,29 +34,30 @@ export default function Sidebar() {
     }
   }, []);
 
-  console.log(user);
-
   const onClickLogout = () => {
-    logout();
+    dispatch(logout());
     localStorage.removeItem('user');
     setUser(null);
+    router.push('/music/main');
     router.refresh();
   };
 
   return (
     <div className={styles.main__sidebar}>
       <div className={styles.sidebar__personal}>
-        {user && user.username ? (
-          <p className={styles.sidebar__personalName}>{user.username}</p>
-        ) : (
-          <p className={styles.sidebar__personalName}>Незнакомец</p>
-        )}
+        <p className={styles.sidebar__personalName}>
+          {user ? String(user.email) : 'Незнакомец'}
+        </p>
 
-        { user ? (<div className={styles.sidebar__icon} onClick={onClickLogout}>
-          <svg>
-            <use xlinkHref="/img/icon/sprite.svg#logout"></use>
-          </svg>
-        </div>) : ''}
+        {user ? (
+          <div className={styles.sidebar__icon} onClick={onClickLogout}>
+            <svg>
+              <use xlinkHref="/img/icon/sprite.svg#logout"></use>
+            </svg>
+          </div>
+        ) : (
+          ''
+        )}
       </div>
       <div className={styles.sidebar__block}>
         <div className={styles.sidebar__list}>

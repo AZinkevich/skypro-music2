@@ -27,3 +27,13 @@ export type SelectionTrackType = {
   name: string;
   items: number[];
 };
+
+export type accessTokenType = {
+  access: string;
+};
+
+export type refreshTokenType = {
+  refresh: string;
+};
+
+export type tokenTypes = accessTokenType & refreshTokenType;

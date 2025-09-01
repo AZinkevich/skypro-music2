@@ -3,10 +3,14 @@ import { UserType } from '@/sharedTypes/sharedTypes';
 
 type initialStateType = {
   currentUser: null | UserType;
+  access: string;
+  refresh: string;
 };
 
 const initialState: initialStateType = {
   currentUser: null,
+  access: '',
+  refresh: '',
 };
 
 const userSlice = createSlice({
@@ -16,12 +20,23 @@ const userSlice = createSlice({
     setCurrentUser: (state, action: PayloadAction<UserType>) => {
       state.currentUser = action.payload;
     },
+    setAccessToken: (state, action: PayloadAction<string>) => {
+      state.access = action.payload;
+      localStorage.setItem('access', action.payload);
+    },
+    setRefreshToken: (state, action: PayloadAction<string>) => {
+      state.refresh = action.payload;
+      localStorage.setItem('refresh', action.payload);
+    },
     logout: (state) => {
       state.currentUser = null;
+      state.access = '';
+      state.refresh = '';
+      localStorage.clear();
     },
   },
 });
 
-export const { setCurrentUser, logout } = userSlice.actions;
+export const {setAccessToken, setRefreshToken, setCurrentUser, logout } = userSlice.actions;
 
 export const userSliceReducer = userSlice.reducer;

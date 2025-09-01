@@ -5,11 +5,19 @@ import classNames from 'classnames';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ChangeEvent, useState } from 'react';
-import { login } from '@/services/auth/authApi';
+import { getTokens, login } from '@/services/auth/authApi';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
+import { useAppDispatch } from '@/store/store';
+import {
+  setAccessToken,
+  setCurrentUser,
+  setRefreshToken,
+} from '@/store/features/userSlice';
+import { userReturn } from '@/sharedTypes/sharedTypes';
 
 export default function Signin() {
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -34,10 +42,14 @@ export default function Signin() {
     setIsLoading(true);
 
     login({ email, password })
-      .then((res) => {
-        console.log(res);
+      .then((res: userReturn) => {
+        dispatch(setCurrentUser(res));
         localStorage.setItem('user', JSON.stringify(res));
-        console.log('Авторизация прошла успешно!');
+        return getTokens({ email, password });
+      })
+      .then((resToken) => {
+        dispatch(setAccessToken(resToken.access));
+        dispatch(setRefreshToken(resToken.refresh));
         router.push('/music/main');
       })
       .catch((error) => {
