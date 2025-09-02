@@ -3,18 +3,24 @@ import styles from './centerblock.module.css';
 import Search from '../search/search';
 import Track from '../track/track';
 import FilterTrack from '../filterTrack/filterTrack';
-import { useAppSelector } from '@/store/store';
+import { TrackType } from '@/sharedTypes/sharedTypes';
 
-export default function Centerblock() {
-  const titlePlaylist = useAppSelector((state) => state.tracks.titlePlaylist);
-  const Playlist = useAppSelector(
-      (state) => state.tracks.playList,
-    );
+type CenterBlockProps = {
+  tracks: TrackType[];
+  title: string;
+  errorMessage: string;
+};
+
+export default function Centerblock({
+  tracks,
+  title,
+}: CenterBlockProps) {
+ 
   return (
     <div className={styles.centerblock}>
       <Search />
-      <h2 className={styles.centerblock__h2}>{titlePlaylist}</h2>
-      <FilterTrack tracks={Playlist} />
+      <h2 className={styles.centerblock__h2}>{title}</h2>
+      <FilterTrack tracks={tracks} />
       <div className={styles.centerblock__content}>
         <div className={styles.content__title}>
           <div className={classnames(styles.playlistTitle__col, styles.col01)}>
@@ -33,8 +39,8 @@ export default function Centerblock() {
           </div>  
         </div>
         <div className={styles.content__playlist}>
-          {Playlist.map((track) => (
-            <Track track={track} key={track._id} playList={Playlist} />
+          {tracks.map((track) => (
+            <Track track={track} key={track._id} playList={tracks} />
           ))}
         </div>
       </div>

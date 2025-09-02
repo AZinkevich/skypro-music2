@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import NavMenu from './navMenu/navMenu';
 import Image from 'next/image';
@@ -6,11 +6,10 @@ import styles from './nav.module.css';
 import { useState } from 'react';
 
 export default function Nav() {
-    const [openNavMenu, setOpenNavMenu] = useState(false);
+  const [openNavMenu, setOpenNavMenu] = useState(false);
   return (
-       <nav className={styles.main__nav}>
+    <nav className={styles.main__nav}>
       <div className={styles.nav__logo}>
-        {/*TODO: img –> Image*/}
         <Image
           width={250}
           height={170}
@@ -33,4 +32,3 @@ export default function Nav() {
     </nav>
   );
 }
-

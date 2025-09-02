@@ -15,6 +15,7 @@ import {
 import { getTimePanel } from '@/utils/helper';
 import stylesImport from '../track/track.module.css';
 import ProgressBar from '../progressBar/progressBar';
+import { useLikeTrack } from '@/hooks/useLikeTracks';
 
 export default function Bar() {
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
@@ -26,6 +27,8 @@ export default function Bar() {
   const [isLoadedTrack, setIsLoadedTrack] = useState(false);
   const currentTime = useAppSelector((state) => state.tracks.currentTime);
   const isShuffle = useAppSelector((state) => state.tracks.isSuffle);
+  const { toggleLike, isLike } = useLikeTrack(currentTrack);
+  const { access } = useAppSelector((state) => state.users);
 
   useEffect(() => {
     setIsLoadedTrack(false);
@@ -87,8 +90,8 @@ export default function Bar() {
   };
 
   const onPrevTrack = () => {
-      dispatch(setPrevTrack());
-    };
+    dispatch(setPrevTrack());
+  };
 
   const onToggleShuffle = () => {
     dispatch(toggleShuffle());
@@ -101,8 +104,16 @@ export default function Bar() {
     }
   };
 
-  const underConstruction = () => {
-    alert('Еще не реализовано');
+  const onClickToggleLike = (
+    e: React.MouseEvent<SVGSVGElement, MouseEvent>,
+  ) => {
+    e.stopPropagation();
+    if (access) {
+      toggleLike();
+    } else {
+      alert('Чтобы добавить или удалить лайк, необходимо авторизоваться');
+      return;
+    }
   };
 
   return (
@@ -133,10 +144,7 @@ export default function Bar() {
         <div className={styles.bar__playerBlock}>
           <div className={styles.bar__player}>
             <div className={styles.player__controls}>
-              <div
-                className={styles.player__btnPrev}
-                onClick={onPrevTrack}
-              >
+              <div className={styles.player__btnPrev} onClick={onPrevTrack}>
                 <svg className={styles.player__btnPrevSvg}>
                   <use xlinkHref="/img/icon/sprite.svg#icon-prev"></use>
                 </svg>
@@ -169,7 +177,7 @@ export default function Bar() {
                   <use xlinkHref="/img/icon/sprite.svg#icon-repeat"></use>
                 </svg>
               </div>
-           <div
+              <div
                 className={classnames(
                   styles.player__btnShuffle,
                   styles.btnIcon,
@@ -211,21 +219,14 @@ export default function Bar() {
                     styles.player__btnShuffle,
                     styles.btnIcon,
                   )}
-                  onClick={underConstruction}
                 >
-                  <svg className={styles.trackPlay__likeSvg}>
-                    <use xlinkHref="/img/icon/sprite.svg#icon-like"></use>
-                  </svg>
-                </div>
-                <div
-                  className={classnames(
-                    styles.trackPlay__dislike,
-                    styles.btnIcon,
-                  )}
-                  onClick={underConstruction}
-                >
-                  <svg className={styles.trackPlay__dislikeSvg}>
-                    <use xlinkHref="/img/icon/sprite.svg#icon-dislike"></use>
+                  <svg
+                    className={styles.trackPlay__likeSvg}
+                    onClick={onClickToggleLike}
+                  >
+                    <use
+                      xlinkHref={`/img/icon/sprite.svg#${isLike ? 'icon-like' : 'icon-dislike'}`}
+                    ></use>
                   </svg>
                 </div>
               </div>

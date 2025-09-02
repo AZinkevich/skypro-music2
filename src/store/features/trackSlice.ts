@@ -1,6 +1,5 @@
 import { TrackType } from "@/sharedTypes/sharedTypes";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-//import { stat } from "fs";
 
 type initialStateType = {
     currentTrack: null | TrackType;
@@ -10,6 +9,10 @@ type initialStateType = {
     shuffledPlayList: TrackType[];
     isSuffle: boolean;
     titlePlaylist: string;
+    allTracks: TrackType[];
+    errorMessage: string;
+    collectionTracks: TrackType[];
+    favoriteTracks: TrackType[];
 };
 
 const initialState: initialStateType = {
@@ -20,6 +23,10 @@ const initialState: initialStateType = {
     shuffledPlayList: [],
     isSuffle: false,
     titlePlaylist: '',
+    allTracks: [],
+    errorMessage: '',
+    collectionTracks: [],
+    favoriteTracks: [],
 };
 
 const trackSlice = createSlice ({
@@ -32,7 +39,7 @@ const trackSlice = createSlice ({
         setIsPlay: (state, action: PayloadAction<boolean>) => {
             state.isPlay = action.payload
         },
-         setCurrentTime: (state, action: PayloadAction<number>) => {
+        setCurrentTime: (state, action: PayloadAction<number>) => {
         state.currentTime = action.payload;
          },
         setCurrentPlaylist: (state, action: PayloadAction<TrackType[]>) => {
@@ -68,10 +75,29 @@ const trackSlice = createSlice ({
                     }
                 state.currentTrack = playList[prevIndexTrack]
             
+        },
+        setAllTracks: (state, action: PayloadAction<TrackType[]>) => {
+        state.allTracks = action.payload;
+        },
+        setCollectionTracks: (state, action: PayloadAction<TrackType[]>) => {
+        state.collectionTracks = action.payload;
+        },
+        setErrorMessage: (state, action: PayloadAction<string>) => {
+        state.errorMessage = action.payload;
+        },
+        setFavoriteTracks: (state, action: PayloadAction<TrackType[]>) => {
+        state.favoriteTracks = action.payload;
+         },
+         addLikedTracks: (state, action: PayloadAction<TrackType>) => {
+        state.favoriteTracks = [...state.favoriteTracks, action.payload];
+        },
+        removeLikedTracks: (state, action: PayloadAction<TrackType>) => {
+        state.favoriteTracks = state.favoriteTracks.filter(
+        (track) => track._id !== action.payload._id,
+        );
+        },
         }
-
-    }
 })
 
-export const {setTitlePlaylist, setCurrentTrack, setIsPlay, setCurrentTime, setCurrentPlaylist, setNextTrack, setPrevTrack, toggleShuffle}  = trackSlice.actions;
+export const {addLikedTracks, removeLikedTracks, setCollectionTracks, setAllTracks, setErrorMessage, setTitlePlaylist, setCurrentTrack, setIsPlay, setCurrentTime, setCurrentPlaylist, setNextTrack, setPrevTrack, toggleShuffle, setFavoriteTracks}  = trackSlice.actions;
 export const trackSliceReducer = trackSlice.reducer;
