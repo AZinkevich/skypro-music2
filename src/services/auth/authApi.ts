@@ -1,5 +1,6 @@
 import axios from "axios"
 import { BASE_URL } from "../costants"
+import { AxiosResponse } from 'axios';
 import { accessTokenType, tokenTypes, userReturn } from "@/sharedTypes/sharedTypes";
 
 type loginProps = {
@@ -7,12 +8,20 @@ type loginProps = {
     password: string;
 }
 
-export const login = (data: loginProps): Promise<userReturn> => {
-    return axios.post(BASE_URL+'/user/login/', data, 
-        {headers: {
-    "content-type": "application/json",
-    }})
-}
+// export const login = (data: loginProps): Promise<userReturn> => {
+//     return axios.post(BASE_URL+'/user/login/', data, 
+//         {headers: {
+//     "content-type": "application/json",
+//     }})
+// }
+
+export const login = (data: loginProps): Promise<AxiosResponse<userReturn>> => {
+  return axios.post<userReturn>(BASE_URL + '/user/login/', data, {
+    headers: {
+      "content-type": "application/json",
+    }
+  });
+};
 
 type regProps = {
     email: string;

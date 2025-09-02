@@ -14,7 +14,7 @@ import {
   setCurrentUser,
   setRefreshToken,
 } from '@/store/features/userSlice';
-import { userReturn } from '@/sharedTypes/sharedTypes';
+//import { userReturn } from '@/sharedTypes/sharedTypes';
 
 export default function Signin() {
   const dispatch = useAppDispatch();
@@ -41,10 +41,17 @@ export default function Signin() {
     }
     setIsLoading(true);
 
+    // login({ email, password })
+    //   .then((res) => {
+    //     dispatch(setCurrentUser(res));
+    //     localStorage.setItem('user', JSON.stringify(res));
+    //     return getTokens({ email, password });
+    //   })
+
     login({ email, password })
-      .then((res: userReturn) => {
-        dispatch(setCurrentUser(res));
-        localStorage.setItem('user', JSON.stringify(res));
+      .then((res) => {
+        dispatch(setCurrentUser(res.data));
+        localStorage.setItem('user', JSON.stringify(res.data));
         return getTokens({ email, password });
       })
       .then((resToken) => {
