@@ -1,26 +1,39 @@
+'use client';
+
 import classnames from 'classnames';
 import styles from './centerblock.module.css';
 import Search from '../search/search';
 import Track from '../track/track';
 import FilterTrack from '../filterTrack/filterTrack';
 import { TrackType } from '@/sharedTypes/sharedTypes';
+import { useAppDispatch } from '@/store/store';
+import { useEffect } from 'react';
+import { setPagePlaylist } from '@/store/features/trackSlice';
 
 type CenterBlockProps = {
-  tracks: TrackType[];
+  tracks: TrackType[];   
   title: string;
   errorMessage: string;
+  pagePlaylist: TrackType[];
 };
 
 export default function Centerblock({
   tracks,
   title,
+  pagePlaylist,
 }: CenterBlockProps) {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {   
+      dispatch(setPagePlaylist(pagePlaylist));   
+  }, [dispatch, pagePlaylist]);
+
  
   return (
     <div className={styles.centerblock}>
       <Search />
       <h2 className={styles.centerblock__h2}>{title}</h2>
-      <FilterTrack tracks={tracks} />
+      <FilterTrack tracks={pagePlaylist} />
       <div className={styles.centerblock__content}>
         <div className={styles.content__title}>
           <div className={classnames(styles.playlistTitle__col, styles.col01)}>

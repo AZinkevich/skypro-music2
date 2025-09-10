@@ -68,6 +68,7 @@
 }
 
 .content__title {
+  width: 85%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -85,6 +86,8 @@
 }
 
 .content__playlist {
+  width: 90%;
+  height: 65vh;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
