@@ -5,7 +5,6 @@ import styles from './filtertrack.module.css';
 import FilterList from '../filterList/filterList';
 import { TrackType } from '@/sharedTypes/sharedTypes';
 import classNames from 'classnames';
-//import styled from '../filterList/filterList.module.css';
 import FilterLengthList from '../filterLengthList/filterLengthList';
 import { useAppDispatch } from '@/store/store';
 import { setFilterAuthors, setFilterGenres, setSortingYears } from '@/store/features/trackSlice';
@@ -26,10 +25,9 @@ export default function FilterTrack({ tracks }: FilterTrackProp) {
   const trackKeys = Object.keys(tracks) as (keyof TrackType)[];
   const [filterListByKey, setFilterListByKey] = useState<keyof TrackType>(
    trackKeys[1],
-   // "_id"
   );
 
-   const uniqueAuthors = getUniqueValuesByKey(tracks, 'author');
+  const uniqueAuthors = getUniqueValuesByKey(tracks, 'author');
   const uniqueGenres = getUniqueValuesByKey(tracks, 'genre');
   const yearsValue = ['Сначала новые', 'Сначала старые', 'По умолчанию'];
 
