@@ -1,20 +1,48 @@
+'use client';
+
 import classnames from 'classnames';
 import styles from './centerblock.module.css';
 import Search from '../search/search';
 import Track from '../track/track';
 import FilterTrack from '../filterTrack/filterTrack';
-import { useAppSelector } from '@/store/store';
+import { TrackType } from '@/sharedTypes/sharedTypes';
+import { useAppDispatch } from '@/store/store';
+import { useEffect } from 'react';
+import { setPagePlaylist } from '@/store/features/trackSlice';
+import { Skeleton } from '../skeleton/skeleton';
 
-export default function Centerblock() {
-  const titlePlaylist = useAppSelector((state) => state.tracks.titlePlaylist);
-  const Playlist = useAppSelector(
-      (state) => state.tracks.playList,
-    );
+type CenterBlockProps = {
+  tracks: TrackType[];   
+  title: string;
+  errorMessage: string;
+  pagePlaylist: TrackType[];
+  isLoading: boolean;
+};
+
+export default function Centerblock({
+  tracks,
+  title,
+  pagePlaylist,
+  isLoading,
+}: CenterBlockProps) {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {   
+      if (!isLoading) {
+      dispatch(setPagePlaylist(pagePlaylist));
+    }
+  }, [dispatch, pagePlaylist, isLoading]);
+
+ 
   return (
     <div className={styles.centerblock}>
       <Search />
-      <h2 className={styles.centerblock__h2}>{titlePlaylist}</h2>
-      <FilterTrack tracks={Playlist} />
+      {isLoading ? (
+        <Skeleton  />
+      ) : (
+        <h2 className={styles.centerblock__h2}>{title}</h2>
+      )}
+      <FilterTrack tracks={pagePlaylist} />
       <div className={styles.centerblock__content}>
         <div className={styles.content__title}>
           <div className={classnames(styles.playlistTitle__col, styles.col01)}>
@@ -33,9 +61,15 @@ export default function Centerblock() {
           </div>  
         </div>
         <div className={styles.content__playlist}>
-          {Playlist.map((track) => (
-            <Track track={track} key={track._id} playList={Playlist} />
-          ))}
+          {isLoading ? (
+            Array.from({ length: 10 }).map((_, index) => (
+              <Skeleton key={index} />
+            ))
+          ) : (
+            tracks.map((track) => (
+              <Track key={track._id} track={track} playList={tracks} />
+            ))
+          )}
         </div>
       </div>
     </div>

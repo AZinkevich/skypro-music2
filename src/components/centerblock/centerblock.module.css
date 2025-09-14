@@ -40,6 +40,11 @@
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
   flex-direction: column;
+
+::-webkit-scrollbar {
+    width: 4px;
+  }
+
 }
 
 .filter__title {
@@ -85,6 +90,7 @@
 }
 
 .content__playlist {
+  height: 50vh;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

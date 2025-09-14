@@ -11,6 +11,7 @@
   padding: 5px 0;
   margin-bottom: 16px;
   list-style: none;
+ cursor: pointer;
 }
 
 .menu__link {

@@ -4,17 +4,29 @@ import styles from './signin.module.css';
 import classNames from 'classnames';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChangeEvent, useState } from 'react';
-import { login } from '@/services/auth/authApi';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { getTokens, login } from '@/services/auth/authApi';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import {
+  setAccessToken,
+  setCurrentUser,
+  setRefreshToken,
+} from '@/store/features/userSlice';
+import { setIsLoading } from '@/store/features/loadingSlice';
 
 export default function Signin() {
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const isLoading = useAppSelector((state) => state.loading.isLoading);
   const router = useRouter();
+
+  useEffect(() => {
+    dispatch(setIsLoading(false));
+  }, [dispatch]);  
 
   const onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -31,39 +43,32 @@ export default function Signin() {
     if (!email.trim() || !password.trim()) {
       return setErrorMessage('Заполните все поля');
     }
-    setIsLoading(true);
 
+    dispatch(setIsLoading(true));
     login({ email, password })
       .then((res) => {
-        console.log(res);
-        localStorage.setItem('user', JSON.stringify(res));
-        console.log('Авторизация прошла успешно!');
+        dispatch(setCurrentUser(res.data));
+        localStorage.setItem('user', JSON.stringify(res.data));
+        return getTokens({ email, password });
+      })
+      .then((resToken) => {
+        dispatch(setAccessToken(resToken.access));
+        dispatch(setRefreshToken(resToken.refresh));
         router.push('/music/main');
       })
       .catch((error) => {
         if (error instanceof AxiosError) {
           if (error.response) {
-            // Запрос был сделан, и сервер ответил кодом состояния, который
-            // выходит за пределы 2xx
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
             setErrorMessage(error.response.data.message);
           } else if (error.request) {
-            // Запрос был сделан, но ответ не получен
-            // `error.request`- это экземпляр XMLHttpRequest в браузере и экземпляр
-            // http.ClientRequest в node.js
-            console.log(error.request);
-            setErrorMessage('Ошибка. Попробуйте позже');
+              setErrorMessage('Ошибка. Попробуйте позже');
           } else {
-            // Произошло что-то при настройке запроса, вызвавшее ошибку
-            console.log('Error', error.message);
             setErrorMessage('Неизвестная ошибка');
           }
         }
       })
       .finally(() => {
-        setIsLoading(false);
+        dispatch(setIsLoading(false));
       });
   };
 
