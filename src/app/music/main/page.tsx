@@ -9,6 +9,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 export default function Home() {
   const dispatch = useAppDispatch();
+  const isLoading = useAppSelector((state) => state.loading.isLoading);
   const { allTracks, titlePlaylist, errorMessage, filteredTracks, filters, searchTrack } = useAppSelector(
     (state) => state.tracks,
   );
@@ -16,8 +17,6 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(resetFilters());
-    // const currentPlayList = filters.authors.length ? filteredTracks : allTracks;
-    // setPlayList(currentPlayList);
   }, [dispatch])
 
  const playlist = useMemo(() => {
@@ -31,6 +30,7 @@ export default function Home() {
       title={titlePlaylist}
       errorMessage={errorMessage}
       pagePlaylist={allTracks}
+      isLoading={isLoading}
     />
   );
 }

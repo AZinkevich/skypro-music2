@@ -1,5 +1,5 @@
 import { TrackType } from '@/sharedTypes/sharedTypes';
-import { useAppDispatch, useAppSelector } from '../store/store';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 import { useState } from 'react';
 import { withReauth } from '@/utils/withReAuth';
 import { AxiosError } from 'axios';

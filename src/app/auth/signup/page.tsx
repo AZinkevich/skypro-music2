@@ -4,15 +4,17 @@ import styles from './signup.module.css';
 import classNames from 'classnames';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { registr } from '@/services/auth/authApi';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
-import { useAppDispatch } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setCurrentUser } from '@/store/features/userSlice';
+import { setIsLoading } from '@/store/features/loadingSlice';
 
 export default function SignUp() {
   const dispatch = useAppDispatch();
+  const isLoading = useAppSelector((state) => state.loading.isLoading);
   const [errorMessage, setErrorMessage] = useState('');
   const [regInput, setRegInput] = useState({
     email: '',
@@ -21,7 +23,10 @@ export default function SignUp() {
     confirmPassword: '',
   });
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+    dispatch(setIsLoading(false));
+  }, [dispatch]);
 
   const onChangeRegInput = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -51,38 +56,26 @@ export default function SignUp() {
     setIsLoading(true);
     const { ...dataToSend } = regInput;
 
+    dispatch(setIsLoading(true));
     registr(dataToSend)
       .then((res) => {
-        console.log(res);
         dispatch(setCurrentUser(res));
         localStorage.setItem('user', JSON.stringify(res));
-        console.log('Регистрация прошла успешно!');
         router.push('/music/main');
       })
       .catch((error) => {
         if (error instanceof AxiosError) {
           if (error.response) {
-            // Запрос был сделан, и сервер ответил кодом состояния, который
-            // выходит за пределы 2xx
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
             setErrorMessage(error.response.data.message);
           } else if (error.request) {
-            // Запрос был сделан, но ответ не получен
-            // `error.request`- это экземпляр XMLHttpRequest в браузере и экземпляр
-            // http.ClientRequest в node.js
-            console.log(error.request);
             setErrorMessage('Ошибка. Попробуйте позже');
           } else {
-            // Произошло что-то при настройке запроса, вызвавшее ошибку
-            console.log('Error', error.message);
             setErrorMessage('Неизвестная ошибка');
           }
         }
       })    
       .finally(() => {
-         setIsLoading(false);
+        dispatch(setIsLoading(false));
       });
   };
 

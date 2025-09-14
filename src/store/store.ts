@@ -1,14 +1,15 @@
-// src/store/store.ts
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector, useStore } from 'react-redux';
 import { trackSliceReducer } from '@/store/features/trackSlice';
 import { userSliceReducer } from './features/userSlice';
+import { loadingSliceReducer } from './features/loadingSlice';
 
 export const makeStore = () => {
   return configureStore({
     reducer: combineReducers({
       tracks: trackSliceReducer,
       users: userSliceReducer,
+      loading: loadingSliceReducer,
     }),
   });
 };

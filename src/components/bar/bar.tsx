@@ -16,6 +16,7 @@ import { getTimePanel } from '@/utils/helper';
 import stylesImport from '../track/track.module.css';
 import ProgressBar from '../progressBar/progressBar';
 import { useLikeTrack } from '@/hooks/useLikeTracks';
+import { toast } from 'react-toastify';
 
 export default function Bar() {
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
@@ -58,14 +59,11 @@ export default function Bar() {
 
   const onTimeUpdate = () => {
     if (audioRef.current) {
-      // console.log(audioRef.current.currentTime);
-      // console.log(audioRef.current.duration);
       dispatch(setCurrentTime(audioRef.current.currentTime));
     }
   };
 
-  const onLoadedMetadata = () => {
-    //console.log('Start');
+  const onLoadedMetadata = () => {  
     if (audioRef.current) {
       audioRef.current.play();
       dispatch(setIsPlay(true));
@@ -111,7 +109,7 @@ export default function Bar() {
     if (access) {
       toggleLike();
     } else {
-      alert('Чтобы добавить или удалить лайк, необходимо авторизоваться');
+      toast('Чтобы добавить или удалить лайк, необходимо авторизоваться');
       return;
     }
   };

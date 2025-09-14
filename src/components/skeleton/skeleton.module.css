@@ -1,0 +1,14 @@
+.skeleton {
+  height: 50px;
+  width: 100%;
+  margin: 10px 0px 10px; 
+  background: #eee;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.3; }
+  50% { opacity: 0.1; }
+  100% { opacity: 0.3; }
+}

@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setCurrentPlaylist, setCurrentTrack, setIsPlay, } from '@/store/features/trackSlice';
 import classNames from 'classnames';
 import { useLikeTrack } from '@/hooks/useLikeTracks';
+import { toast } from 'react-toastify';
 
 
 type trackTypeProp = {
@@ -17,8 +18,7 @@ type trackTypeProp = {
 
 export default function Track({ track, playList }: trackTypeProp) {
   const dispatch = useAppDispatch();
-  const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
-  const isPlay = useAppSelector((state) => state.tracks.isPlay);
+  const { currentTrack, isPlay } = useAppSelector((state) => state.tracks);
   const { access } = useAppSelector((state) => state.users);
   const { toggleLike, isLike } = useLikeTrack(track);
 
@@ -35,7 +35,7 @@ export default function Track({ track, playList }: trackTypeProp) {
     if (access) {
       toggleLike();
     } else {
-      alert('Чтобы добавить или удалить лайк, необходимо авторизоваться');
+      toast('Чтобы добавить или удалить лайк, необходимо авторизоваться');
       return;
     }
   };

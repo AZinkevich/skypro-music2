@@ -14,6 +14,7 @@ export const getSelectionTracks = async (
   return await axios(BASE_URL + `/catalog/selection/${selectionId}/`).then(
     (res) => {
       return res.data.data;
+        
     },
   );
 };

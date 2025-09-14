@@ -1,7 +1,7 @@
 'use client';
 
 import CenterBlock from '@/components/centerblock/centerblock';
-import { useAppDispatch, useAppSelector } from '../../../store/store';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 import { useEffect, useMemo } from 'react';
 import { resetFilters } from '@/store/features/trackSlice';
 import { getPlaylist } from '@/utils/getPlaylist';
@@ -16,6 +16,7 @@ export default function FavoritePage() {
     filters,
     searchTrack,
   } = useAppSelector((state) => state.tracks);
+  const isLoading = useAppSelector((state) => state.loading.isLoading);
 
   useEffect(() => {
     dispatch(resetFilters());
@@ -31,6 +32,7 @@ export default function FavoritePage() {
       title={titlePlaylist}
       errorMessage={errorMessage}
       pagePlaylist={favoriteTracks}
+      isLoading={isLoading}
     />
   );
 }

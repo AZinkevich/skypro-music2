@@ -8,13 +8,6 @@ type loginProps = {
     password: string;
 }
 
-// export const login = (data: loginProps): Promise<userReturn> => {
-//     return axios.post(BASE_URL+'/user/login/', data, 
-//         {headers: {
-//     "content-type": "application/json",
-//     }})
-// }
-
 export const login = (data: loginProps): Promise<AxiosResponse<userReturn>> => {
   return axios.post<userReturn>(BASE_URL + '/user/login/', data, {
     headers: {

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useAppDispatch } from '../store/store';
+import { useAppDispatch } from '@/store/store';
 import {
   setAccessToken,
   setCurrentUser,
